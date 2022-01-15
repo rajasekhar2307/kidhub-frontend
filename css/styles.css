@@ -11922,3 +11922,23 @@ header.masthead .h1 {
   border-radius: 0.5rem;
   margin-left: 1rem;
 }
+
+
+#notifications-list {
+  list-style: none;
+  padding-left: 0;
+  padding-top: 2rem;
+  
+}
+
+.notification-timestamp {
+  font-size: 0.7rem;
+}
+
+.notification-styles{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.1rem;
+  border-top: #000 solid 1px;
+}

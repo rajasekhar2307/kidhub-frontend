@@ -12,6 +12,39 @@ if ("serviceWorker" in navigator) {
     });
 }
 
+if(document.getElementById("notification-button")){
+  document.getElementById("notification-button").addEventListener('click',e => {
+    showNotifications();
+  })
+}
+
+const showNotifications = () => {
+ const notifications = getNotificationsFromLocalStorage();
+ const list = document.getElementById("notifications-list")
+ while (list.firstChild) {
+   list.firstChild.remove();
+ }
+ let nots = notifications.reverse()
+ for(let i in nots){
+   const li = document.createElement("li");
+
+   li.innerHTML = `<div class="notification-styles">${nots[i].detail} <span class="notification-timestamp">${nots[i].timestamp}<span><div>`;
+   list.appendChild(li);
+ }
+}
+
+const getNotificationsFromLocalStorage = () => {
+  const notifications = JSON.parse(localStorage.getItem("notifications"))
+  if(notifications == null || notifications.length == 0){
+    return []
+  }
+  return notifications;
+}
+
+const addNotificationToLocalStorage = (notifications) => {
+  localStorage.setItem("notifications", JSON.stringify(notifications))
+}
+
 function getStudentInfo(admission_number){
   const postdata = {
     admission_number: admission_number,
@@ -101,7 +134,7 @@ var intervalID = setInterval(backgroundSync, 10000);
 async function backgroundSync(){
   console.log("inside backsync")
   const marks_to_be_uploaded = JSON.parse(localStorage.getItem("marks_to_be_uploaded"));
-  if(marks_to_be_uploaded != null){
+  if(marks_to_be_uploaded != null && window.navigator.onLine){
     let marksList = [];
     for (let i in marks_to_be_uploaded){
       var student = getStudentInfo(marks_to_be_uploaded[i].student_id)
@@ -126,9 +159,21 @@ async function backgroundSync(){
     }).then((mresp) => {
       mresp.json().then((mdata) => {
         if (mdata == "saved!") {
-          alert("Marks Saved!");
+          let not = {
+            detail: "Marks saved!",
+            timestamp: new Date().toLocaleString()
+          }
+          let notifications = getNotificationsFromLocalStorage();
+          notifications.push(not);
+          addNotificationToLocalStorage(notifications);
         } else {
-          alert("Make Sure Marks aren't already submitted!");
+          let not = {
+            detail: "Student details already exist.",
+            timestamp: new Date().toLocaleString(),
+          };
+          let notifications = getNotificationsFromLocalStorage();
+          notifications.push(not);
+          addNotificationToLocalStorage(notifications);
         }
       });
     });
@@ -138,7 +183,7 @@ async function backgroundSync(){
   const attendance_to_be_uploaded = JSON.parse(
     localStorage.getItem("attendance_to_be_uploaded")
   );
-  if (attendance_to_be_uploaded != null) {
+  if (attendance_to_be_uploaded != null && window.navigator.onLine) {
     let attendanceList = [];
     for (let i in attendance_to_be_uploaded) {
       student = getStudentInfo(attendance_to_be_uploaded[i].student_id);
@@ -162,22 +207,33 @@ async function backgroundSync(){
     }).then((mresp) => {
       mresp.json().then((mdata) => {
         if (mdata == "saved!") {
-          alert("Attendance Submitted!");
+          let not = {
+            detail: "Attendance saved!",
+            timestamp: new Date().toLocaleString(),
+          };
+          let notifications = getNotificationsFromLocalStorage();
+          notifications.push(not);
+          addNotificationToLocalStorage(notifications);
         } else {
-          alert("Attendance already submitted! Check again.");
+          let not = {
+            detail: "Attendance for this date already submitted",
+            timestamp: new Date().toLocaleString(),
+          };
+          let notifications = getNotificationsFromLocalStorage();
+          notifications.push(not);
+          addNotificationToLocalStorage(notifications);
         }
       });
     });
     localStorage.removeItem("attendance_to_be_uploaded");
-
   }
 
   const students_to_register = JSON.parse(
     localStorage.getItem("students_to_register")
   );
-  if (students_to_register != null) {
-    for (let k in students_to_register){
-      const user = students_to_register[k].user
+  if (students_to_register != null && window.navigator.onLine) {
+    for (let k in students_to_register) {
+      const user = students_to_register[k].user;
       const tokens = getTokens();
       fetch("http://127.0.0.1:8000/auth/users/", {
         method: "POST",
@@ -194,7 +250,13 @@ async function backgroundSync(){
               for (let i in data) {
                 errors += data[i][0] + "\n";
               }
-              alert(errors);
+              let not = {
+                detail: errors,
+                timestamp: new Date().toLocaleString(),
+              };
+              let notifications = getNotificationsFromLocalStorage();
+              notifications.push(not);
+              addNotificationToLocalStorage(notifications);
               return;
             }
 
@@ -227,12 +289,22 @@ async function backgroundSync(){
                 .then((respdata) => {
                   console.log(respdata);
                   if (respdata["detail"]) {
-                    alert(respdata["detail"]);
+                    let not = {
+                      detail: respdata["detail"],
+                      timestamp: new Date().toLocaleString(),
+                    };
+                    let notifications = getNotificationsFromLocalStorage();
+                    notifications.push(not);
+                    addNotificationToLocalStorage(notifications);
                     return;
                   }
-                  if (!alert("Student created!")) {
-                    window.location.reload();
-                  }
+                  let not = {
+                    detail: "Student Registered",
+                    timestamp: new Date().toLocaleString(),
+                  };
+                  let notifications = getNotificationsFromLocalStorage();
+                  notifications.push(not);
+                  addNotificationToLocalStorage(notifications);
                 })
                 .catch(() => {
                   alert("ERROR OCCURED");
@@ -245,14 +317,12 @@ async function backgroundSync(){
         });
     }
     localStorage.removeItem("students_to_register");
-
   }
 
   const offline_update_data = JSON.parse(
     localStorage.getItem("offline_update_data")
   );
-  if (offline_update_data != null) {
-
+  if (offline_update_data != null && window.navigator.onLine) {
     const user = offline_update_data.user;
     const student = offline_update_data.student;
 
@@ -281,9 +351,13 @@ async function backgroundSync(){
           }).then((resp) => {
             resp.json().then((respdata) => {
               console.log(respdata);
-              if (!alert("Student updated!")) {
-                window.location.reload();
-              }
+              let not = {
+                detail: "Student Updated",
+                timestamp: new Date().toLocaleString()
+              };
+              let notifications = getNotificationsFromLocalStorage();
+              notifications.push(not);
+              addNotificationToLocalStorage(notifications);
             });
           });
         });
@@ -291,7 +365,7 @@ async function backgroundSync(){
       .catch((err) => {
         console.log(err);
       });
-      localStorage.removeItem("offline_update_data");
+    localStorage.removeItem("offline_update_data");
   }
 }
 
