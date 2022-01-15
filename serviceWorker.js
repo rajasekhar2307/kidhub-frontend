@@ -4,11 +4,12 @@ const dynamicCacheName = "dynamic-assets-v1";
 const assets = [
   "/",
   "/index.html",
+  "/home.html",
+  "/profile.html",
   "/js/main.js",
   "/js/scripts.js",
   "/css/styles.css",
   "/assets/favicon.ico",
-  "/assets/img/bg-masthead.jpg",
   "offline.html",
   "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css",
   "https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700",
@@ -63,3 +64,7 @@ self.addEventListener("fetch", (event) => {
       })
   );
 });
+
+self.addEventListener("sync", async (event) => {
+  console.log("Sync function fetched")
+})

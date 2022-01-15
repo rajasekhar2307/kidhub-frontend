@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="apple-touch-icon" href="img/icon-72x72.png" />
+
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="white"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="black"
+    />
+    <title>Kidhub - Get Attendance</title>
+
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap Icons-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Google fonts-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- SimpleLightbox plugin CSS-->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css"
+      rel="stylesheet"
+    />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+  </head>
+  <body>
+    <section class="page-section" id="contact">
+      <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-lg-8 col-xl-6 text-center">
+            <h2 class="mt-0">Get your attendance</h2>
+            <hr class="divider" />
+            <p class="text-muted mb-5">
+              Fill in all the details to get started.
+            </p>
+          </div>
+        </div>
+        <form
+          class="container px-4 px-lg-5 h-100 custom-container"
+          id="get-student-attendance"
+        >
+          <div class="class-section" id="class-studying">
+            <label for="class">Student Roll: </label>
+            <input type="text" id="student-roll-number" />
+          </div>
+          <button class="btn btn-primary mb-5" type="submit">
+            Get student
+          </button>
+        </form>
+        <div class="class-section">
+          <label for="class">Present: </label>
+          <label for="class" id="present"></label>
+        </div>
+        <div class="class-section">
+          <label for="class">Absent: </label>
+          <label for="class" id="absent"></label>
+        </div>
+        <div class="class-section">
+          <label for="class">Percentage: </label>
+          <label for="class" id="percent">Absent: </label>
+        </div>
+      </div>
+    </section>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

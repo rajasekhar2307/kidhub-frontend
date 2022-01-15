@@ -20,7 +20,7 @@
       media="(prefers-color-scheme: dark)"
       content="black"
     />
-    <title>Kidhub - Add Student</title>
+    <title>Kidhub - Edit Student</title>
 
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -53,17 +53,39 @@
       <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
           <div class="col-lg-8 col-xl-6 text-center">
-            <h2 class="mt-0">Register a Student</h2>
+            <h2 class="mt-0">Edit a Student</h2>
             <hr class="divider" />
             <p class="text-muted mb-5">
               Fill in all the details to get started.
             </p>
           </div>
         </div>
+        <form
+          class="container px-4 px-lg-5 h-100 custom-container"
+          id="get-student-info"
+        >
+          <div class="class-section" id="class-studying">
+            <label for="class">Student Roll: </label>
+            <input type="text" id="student-roll-number">
+          </div>
+          <button class="btn btn-primary mb-5" type="submit">Get student</button>
+          
+        </form>
         <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
           <div class="col-lg-6">
-            <form id="registration-form" action="register">
+            <form id="update-form">
               <!-- Name input-->
+              <div class="form-floating mb-3">
+                <input
+                  class="form-control"
+                  id="userid"
+                  type="text"
+                  placeholder="Enter username..."
+                  data-sb-validations="required"
+                hidden
+                />
+                
+              </div>
               <div class="form-floating mb-3">
                 <input
                   class="form-control"
@@ -71,7 +93,7 @@
                   type="text"
                   placeholder="Enter username..."
                   data-sb-validations="required"
-                  required
+                  readonly
                 />
                 <label for="username">username</label>
                 <div class="invalid-feedback" data-sb-feedback="name:required">
@@ -86,7 +108,6 @@
                   type="email"
                   placeholder="name@example.com"
                   data-sb-validations="required,email"
-                  required
                 />
                 <label for="email">Email address</label>
                 <div class="invalid-feedback" data-sb-feedback="email:required">
@@ -104,7 +125,6 @@
                   type="tel"
                   placeholder="(123) 456-7890"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="first_name">First name</label>
                 <div
@@ -121,7 +141,6 @@
                   type="tel"
                   placeholder="(123) 456-7890"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="last_name">last name</label>
                 <div
@@ -138,14 +157,13 @@
                 type="text"
                 hidden
               />
-              <div class="form-floating mb-3">
+              <!-- <div class="form-floating mb-3">
                 <input
                   class="form-control"
                   id="password1"
                   type="password"
                   placeholder="****"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="phone">Password</label>
                 <div class="invalid-feedback" data-sb-feedback="phone:required">
@@ -159,13 +177,12 @@
                   type="password"
                   placeholder="****"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="phone">Re-Enter Password</label>
                 <div class="invalid-feedback" data-sb-feedback="phone:required">
                   A Password number is required.
                 </div>
-              </div>
+              </div> -->
               <div class="form-floating mb-3">
                 <input
                   class="form-control"
@@ -173,7 +190,7 @@
                   type="text"
                   placeholder="(123) 456-7890"
                   data-sb-validations="required"
-                  required
+                  readonly
                 />
                 <label for="admission_number">Admission number</label>
                 <div
@@ -190,7 +207,6 @@
                   placeholder="(123) 456-7890"
                   type="text"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="father_name">Father name</label>
                 <div
@@ -207,7 +223,6 @@
                   placeholder="(123) 456-7890"
                   type="text"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="mother_name">Mother name</label>
                 <div
@@ -224,7 +239,6 @@
                   id="address"
                   type="text"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="address">Address</label>
                 <div
@@ -241,7 +255,6 @@
                   placeholder="(123) 456-7890"
                   type="tel"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="phone">Phone (Parent/Guardian)</label>
                 <div class="invalid-feedback" data-sb-feedback="phone:required">
@@ -255,7 +268,6 @@
                   placeholder="(123) 456-7890"
                   type="text"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="birth_date">DOB</label>
                 <div
@@ -272,7 +284,6 @@
                   id="class_year"
                   type="text"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="class_year">Class</label>
                 <div
@@ -289,7 +300,6 @@
                   id="div"
                   type="text"
                   data-sb-validations="required"
-                  required
                 />
                 <label for="div">Div</label>
                 <div class="invalid-feedback" data-sb-feedback="div:required">

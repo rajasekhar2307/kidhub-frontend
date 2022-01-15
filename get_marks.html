@@ -9,7 +9,6 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <link rel="apple-touch-icon" href="img/icon-72x72.png" />
-
     <meta
       name="theme-color"
       media="(prefers-color-scheme: light)"
@@ -20,7 +19,8 @@
       media="(prefers-color-scheme: dark)"
       content="black"
     />
-    <title>You are offline - Kidhub</title>
+    <title>Kidhub - Get Marks</title>
+
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap Icons-->
@@ -75,44 +75,66 @@
               <a class="nav-link" href="#services">Contact</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="login.html">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="signup.html">Sign Up</a>
+              <a class="nav-link" id="logout" href="login.html">Login</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
     <!-- Masthead-->
-    <header class="masthead">
-      <div class="container px-4 px-lg-5 h-100">
-        <div
-          class="
-            row
-            gx-4 gx-lg-5
-            h-100
-            align-items-center
-            justify-content-center
-            text-center
-          "
+
+    <!-- Services-->
+    <section class="page-section" id="attendance">
+      <div class="container px-4 px-lg-5">
+        <h2 class="text-center mt-0">Marks</h2>
+        <hr class="divider" />
+        <form
+          class="container px-4 px-lg-5 h-100 custom-container"
+          id="get-exam-results"
         >
-          <div class="col-lg-8 align-self-end">
-            <h1 class="text-black font-weight-bold">OOPS!</h1>
-            <hr class="divider" />
+          <div class="class-section" id="class-studying">
+            <label for="class">Subject: </label>
+            <select name="subject" id="subject">
+              <option value="FL">First Language</option>
+              <option value="UL">Second Language</option>
+              <option value="E">English</option>
+              <option value="M">Maths</option>
+              <option value="P">Physics</option>
+              <option value="B">Biology</option>
+              <option value="S">Social</option>
+              <option value="AL">All</option>
+            </select>
           </div>
-          <div class="col-lg-8 align-self-baseline">
-            <p class="text-black-75 mb-5">
-              Looks like you are offline. Sorry, we are unable to load this page
-              in a while.
-            </p>
-            <a class="btn btn-primary btn-xl" href="home.html">Get back to home</a>
+          <div class="class-section" id="class-section">
+            <label for="exam_type">Exam Type: </label>
+            <select name="exam_type" id="exam_type">
+              <option value="Q">Quarterly Examination</option>
+              <option value="H">Half Yearly Examination</option>
+              <option value="A">Annual Examination</option>
+            </select>
           </div>
+          <div class="class-section" id="class-studying">
+            <label for="class">Student Roll: </label>
+            <input type="text" id="student-roll-number" />
+          </div>
+          <button class="btn btn-primary" type="submit">Get students</button>
+        </form>
+
+        <hr class="divider" />
+
+        <div>
+          <table class="table table-hover">
+            <thead>
+              <th>Admission Number</th>
+              <th>Subject</th>
+              <th>Total Scored</th>
+              <th>Max Marks</th>
+            </thead>
+            <tbody id="studentlist-marks"></tbody>
+          </table>
         </div>
       </div>
-    </header>
-
-    <!-- Contact-->
+    </section>
 
     <!-- Footer-->
     <footer class="bg-light py-5">
@@ -124,8 +146,12 @@
     </footer>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SimpleLightbox plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
+    <script src="js/db.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>

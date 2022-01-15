@@ -9,7 +9,6 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <link rel="apple-touch-icon" href="img/icon-72x72.png" />
-
     <meta
       name="theme-color"
       media="(prefers-color-scheme: light)"
@@ -20,7 +19,8 @@
       media="(prefers-color-scheme: dark)"
       content="black"
     />
-    <title>You are offline - Kidhub</title>
+    <title>Attendance</title>
+
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap Icons-->
@@ -77,42 +77,67 @@
             <li class="nav-item">
               <a class="nav-link" href="login.html">Login</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="signup.html">Sign Up</a>
-            </li>
           </ul>
         </div>
       </div>
     </nav>
     <!-- Masthead-->
-    <header class="masthead">
-      <div class="container px-4 px-lg-5 h-100">
-        <div
-          class="
-            row
-            gx-4 gx-lg-5
-            h-100
-            align-items-center
-            justify-content-center
-            text-center
-          "
-        >
-          <div class="col-lg-8 align-self-end">
-            <h1 class="text-black font-weight-bold">OOPS!</h1>
-            <hr class="divider" />
-          </div>
-          <div class="col-lg-8 align-self-baseline">
-            <p class="text-black-75 mb-5">
-              Looks like you are offline. Sorry, we are unable to load this page
-              in a while.
-            </p>
-            <a class="btn btn-primary btn-xl" href="home.html">Get back to home</a>
-          </div>
-        </div>
-      </div>
-    </header>
 
-    <!-- Contact-->
+    <!-- Services-->
+    <section class="page-section" id="attendance">
+      <div class="container px-4 px-lg-5">
+        <h2 class="text-center mt-0">Attendance</h2>
+        <hr class="divider" />
+        <form
+          class="container px-4 px-lg-5 h-100 custom-container"
+          id="get-student-form"
+        >
+          <div class="class-section" id="class-studying">
+            <label for="class">Class: </label>
+            <select name="class" id="class">
+              <option value="NUR">Nursery</option>
+              <option value="LKG">LKG</option>
+              <option value="UKG">UKG</option>
+              <option value="I">1</option>
+              <option value="II">2</option>
+              <option value="III">3</option>
+              <option value="IV">4</option>
+              <option value="V">5</option>
+              <option value="VI">6</option>
+              <option value="VII">7</option>
+              <option value="VIII">8</option>
+              <option value="IX">9</option>
+              <option value="X">10</option>
+            </select>
+          </div>
+          <div class="class-section" id="class-section">
+            <label for="class">Section: </label>
+            <select name="section" id="section">
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+          </div>
+          <button class="btn btn-primary">Get students</button>
+        </form>
+
+        <hr class="divider" />
+
+        <form id="submit-attendance-form">
+          <label style="margin: 3rem 1rem" for="max_marks">Date: </label>
+          <input id="date" type="date" required name="date" >
+          <table class="table">
+            <thead>
+              <th>Admission Number</th>
+              <th>Check</th>
+            </thead>
+            <tbody id="studentlist-attendance"></tbody>
+          </table>
+          <button class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </section>
 
     <!-- Footer-->
     <footer class="bg-light py-5">
@@ -124,8 +149,12 @@
     </footer>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SimpleLightbox plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
+    <script src="js/db.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
