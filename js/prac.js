@@ -12,40 +12,42 @@ if ("serviceWorker" in navigator) {
     });
 }
 
-if(document.getElementById("notification-button")){
-  document.getElementById("notification-button").addEventListener('click',e => {
-    showNotifications();
-  })
+if (document.getElementById("notification-button")) {
+  document
+    .getElementById("notification-button")
+    .addEventListener("click", (e) => {
+      showNotifications();
+    });
 }
 
 const showNotifications = () => {
- const notifications = getNotificationsFromLocalStorage();
- const list = document.getElementById("notifications-list")
- while (list.firstChild) {
-   list.firstChild.remove();
- }
- let nots = notifications.reverse()
- for(let i in nots){
-   const li = document.createElement("li");
+  const notifications = getNotificationsFromLocalStorage();
+  const list = document.getElementById("notifications-list");
+  while (list.firstChild) {
+    list.firstChild.remove();
+  }
+  let nots = notifications.reverse();
+  for (let i in nots) {
+    const li = document.createElement("li");
 
-   li.innerHTML = `<div class="notification-styles">${nots[i].detail} <span class="notification-timestamp">${nots[i].timestamp}<span><div>`;
-   list.appendChild(li);
- }
-}
+    li.innerHTML = `<div class="notification-styles">${nots[i].detail} <span class="notification-timestamp">${nots[i].timestamp}<span><div>`;
+    list.appendChild(li);
+  }
+};
 
 const getNotificationsFromLocalStorage = () => {
-  const notifications = JSON.parse(localStorage.getItem("notifications"))
-  if(notifications == null || notifications.length == 0){
-    return []
+  const notifications = JSON.parse(localStorage.getItem("notifications"));
+  if (notifications == null || notifications.length == 0) {
+    return [];
   }
   return notifications;
-}
+};
 
 const addNotificationToLocalStorage = (notifications) => {
-  localStorage.setItem("notifications", JSON.stringify(notifications))
-}
+  localStorage.setItem("notifications", JSON.stringify(notifications));
+};
 
-function getStudentInfo(admission_number){
+function getStudentInfo(admission_number) {
   const postdata = {
     admission_number: admission_number,
   };
@@ -59,16 +61,15 @@ function getStudentInfo(admission_number){
     return {
       student: {
         profile: pdata,
-        user: data
-      }
-    }
-  }
-  else{
-    if(window.navigator.onLine == false){
+        user: data,
+      },
+    };
+  } else {
+    if (window.navigator.onLine == false) {
       alert("You are offline! requested data is unavailable in offline mode");
       return;
     }
-    fetch("http://127.0.0.1:8000/app/getdetails/stup/", {
+    fetch("https://rajasekhar2307.pythonanywhere.com/app/getdetails/stup/", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -85,7 +86,7 @@ function getStudentInfo(admission_number){
           alert("Student not found");
         }
 
-        fetch("http://127.0.0.1:8000/app/getdetails/stuu/", {
+        fetch("https://rajasekhar2307.pythonanywhere.com/app/getdetails/stuu/", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -99,21 +100,16 @@ function getStudentInfo(admission_number){
               return;
             }
 
-            let students_array = JSON.parse(
-              localStorage.getItem("students")
-            );
+            let students_array = JSON.parse(localStorage.getItem("students"));
             if (students_array === null) {
               students_array = [];
             }
             const student = {
               profile: pdata,
-              user : data
-            }
+              user: data,
+            };
             students_array.push(student);
-            localStorage.setItem(
-              "students",
-              JSON.stringify(students_array)
-            );
+            localStorage.setItem("students", JSON.stringify(students_array));
             return student;
           });
         });
@@ -124,27 +120,28 @@ function getStudentInfo(admission_number){
 
 let syncToBePerformed = false;
 
-
 var intervalID = setInterval(backgroundSync, 10000);
 
-async function backgroundSync(){
-  console.log("inside backsync")
-  const marks_to_be_uploaded = JSON.parse(localStorage.getItem("marks_to_be_uploaded"));
-  if(marks_to_be_uploaded != null && window.navigator.onLine){
+async function backgroundSync() {
+  console.log("inside backsync");
+  const marks_to_be_uploaded = JSON.parse(
+    localStorage.getItem("marks_to_be_uploaded")
+  );
+  if (marks_to_be_uploaded != null && window.navigator.onLine) {
     let marksList = [];
-    for (let i in marks_to_be_uploaded){
-      var student = getStudentInfo(marks_to_be_uploaded[i].student_id)
+    for (let i in marks_to_be_uploaded) {
+      var student = getStudentInfo(marks_to_be_uploaded[i].student_id);
       let marks = {
         ...marks_to_be_uploaded[i],
-        student_id: student.student.profile.id
-      }
+        student_id: student.student.profile.id,
+      };
       marksList.push(marks);
     }
     let response = {
       marks: marksList,
     };
     const tokens = getTokens();
-    fetch("http://127.0.0.1:8000/app/postmarks/", {
+    fetch("https://rajasekhar2307.pythonanywhere.com/app/postmarks/", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -156,8 +153,8 @@ async function backgroundSync(){
         if (mdata == "saved!") {
           let not = {
             detail: "Marks saved!",
-            timestamp: new Date().toLocaleString()
-          }
+            timestamp: new Date().toLocaleString(),
+          };
           let notifications = getNotificationsFromLocalStorage();
           notifications.push(not);
           addNotificationToLocalStorage(notifications);
@@ -172,7 +169,7 @@ async function backgroundSync(){
         }
       });
     });
-    localStorage.removeItem('marks_to_be_uploaded');
+    localStorage.removeItem("marks_to_be_uploaded");
   }
 
   const attendance_to_be_uploaded = JSON.parse(
@@ -190,7 +187,7 @@ async function backgroundSync(){
     }
     const tokens = getTokens();
 
-    fetch("http://127.0.0.1:8000/app/postattendance/", {
+    fetch("https://rajasekhar2307.pythonanywhere.com/app/postattendance/", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -228,7 +225,7 @@ async function backgroundSync(){
     for (let k in students_to_register) {
       const user = students_to_register[k].user;
       const tokens = getTokens();
-      fetch("http://127.0.0.1:8000/auth/users/", {
+      fetch("https://rajasekhar2307.pythonanywhere.com/auth/users/", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -269,7 +266,7 @@ async function backgroundSync(){
               user: user_id,
             };
 
-            fetch("http://127.0.0.1:8000/students/", {
+            fetch("https://rajasekhar2307.pythonanywhere.com/students/", {
               method: "POST",
               headers: {
                 "Content-type": "application/json",
@@ -320,7 +317,7 @@ async function backgroundSync(){
 
     const tokens = getTokens();
 
-    fetch("http://127.0.0.1:8000/app/uptdetails/stuu/", {
+    fetch("https://rajasekhar2307.pythonanywhere.com/app/uptdetails/stuu/", {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -333,7 +330,7 @@ async function backgroundSync(){
           usercreated_response = data;
           const user_id = usercreated_response.id;
 
-          fetch("http://127.0.0.1:8000/app/uptdetails/stup/", {
+          fetch("https://rajasekhar2307.pythonanywhere.com/app/uptdetails/stup/", {
             method: "PUT",
             headers: {
               "Content-type": "application/json",
@@ -344,7 +341,7 @@ async function backgroundSync(){
             resp.json().then((respdata) => {
               let not = {
                 detail: "Student Updated",
-                timestamp: new Date().toLocaleString()
+                timestamp: new Date().toLocaleString(),
               };
               let notifications = getNotificationsFromLocalStorage();
               notifications.push(not);
@@ -364,36 +361,32 @@ async function backgroundSync(){
 
 const getTokens = () => {
   return JSON.parse(localStorage.getItem("jwt_tokens"));
-}
+};
 
 const getUser = () => {
   return JSON.parse(localStorage.getItem("user"));
-}
+};
 
 const isLoggedIn = () => {
-   if ((getUser() && getUser()["detail"] != null) || getTokens() === null){
-     return false;
-   }
+  if ((getUser() && getUser()["detail"] != null) || getTokens() === null) {
+    return false;
+  }
   return true;
-}
+};
 
 const getMarksFromLocalStorage = (subject, exam_name, admission_number) => {
   const marks = JSON.parse(localStorage.getItem("marks"));
-  if(marks !=null && marks.length != 0){
+  if (marks != null && marks.length != 0) {
     const resp = marks.filter((mark) => {
-      if (
-        mark.admission_number == admission_number &&
-        mark.subject == subject &&
-        mark.exam_name == exam_name
-      ) {
+      if (mark.admission_number == admission_number) {
         return true;
       }
       return false;
     });
-    return resp.length == 0 ? null: resp[0];
+    return resp.length == 0 ? null : resp[0];
   }
-  return null
-}
+  return null;
+};
 
 const getAttendanceFromLocalStorage = (admission_number) => {
   const attendance = JSON.parse(localStorage.getItem("attendance"));
@@ -426,7 +419,7 @@ const getStudentFromLocalStorage = (admission_number) => {
 const getSectionStudentsFromLocalStorage = (classStudying, section) => {
   const admissionnumbers = JSON.parse(localStorage.getItem("sections"));
   if (admissionnumbers != null && admissionnumbers.length != 0) {
-    let key = classStudying+'-'+section;
+    let key = classStudying + "-" + section;
     return admissionnumbers[key];
   }
   return null;
@@ -434,7 +427,7 @@ const getSectionStudentsFromLocalStorage = (classStudying, section) => {
 
 // const refreshTokens = async () => {
 //   const tokens = getTokens();
-//   const response = await fetch("http://127.0.0.1:8000/auth/jwt/refresh/", {
+//   const response = await fetch("https://rajasekhar2307.pythonanywhere.com/auth/jwt/refresh/", {
 //     method: "POST",
 //     headers: {
 //       "Content-type": "application/json",
@@ -454,7 +447,7 @@ async function login() {
     password: password,
   };
 
-  const response = await fetch("http://127.0.0.1:8000/auth/jwt/create/", {
+  const response = await fetch("https://rajasekhar2307.pythonanywhere.com/auth/jwt/create/", {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -463,15 +456,13 @@ async function login() {
   });
   const jwt_tokens = await response.json();
   const storage = localStorage;
-  if(jwt_tokens['detail']){
-    alert('Enter Valid Details')
-  }
-  else{
+  if (jwt_tokens["detail"]) {
+    alert("Enter Valid Details");
+  } else {
     const tokens = JSON.stringify(jwt_tokens);
     storage.setItem("jwt_tokens", tokens);
-    window.location.href = "http://127.0.0.1:5502/home.html";
+    window.location.href = "https://kidhub.netlify.app/home.html";
   }
-  
 }
 
 // Handlign login of user
@@ -483,8 +474,8 @@ if (document.querySelector("#loginform")) {
 }
 
 if (document.querySelector("#get-student-form")) {
-  if(!isLoggedIn()){
-    window.location.href = "http://127.0.0.1:5502/login.html";
+  if (!isLoggedIn()) {
+    window.location.href = "https://kidhub.netlify.app/login.html";
   }
   document
     .querySelector("#get-student-form")
@@ -513,11 +504,10 @@ if (document.querySelector("#get-student-form")) {
           }
         } else if (document.getElementById("studentlist-marks")) {
           if (!isLoggedIn()) {
-            window.location.href = "http://127.0.0.1:5502/login.html";
+            window.location.href = "https://kidhub.netlify.app/login.html";
           }
           const list = document.getElementById("studentlist-marks");
           for (let i in localSection) {
-
             const row = document.createElement("tr");
 
             row.innerHTML = `
@@ -564,12 +554,13 @@ if (document.querySelector("#get-student-form")) {
                 JSON.stringify(marksArray)
               );
               syncToBePerformed = true;
-              alert("You are currently offline! Marks will be updated when network is established")
+              alert(
+                "You are currently offline! Marks will be updated when network is established"
+              );
             });
         } else if (document.getElementById("studentlist-attendance")) {
           const list = document.getElementById("studentlist-attendance");
           for (let i in localSection) {
-
             const row = document.createElement("tr");
 
             row.innerHTML = `
@@ -590,9 +581,8 @@ if (document.querySelector("#get-student-form")) {
                   date: date,
                   student_id: localSection[i],
                   status:
-                    document.getElementById(
-                      `status-${localSection[i]}`
-                    ).checked == true
+                    document.getElementById(`status-${localSection[i]}`)
+                      .checked == true
                       ? "P"
                       : "AB",
                 };
@@ -609,15 +599,14 @@ if (document.querySelector("#get-student-form")) {
                 "attendance_to_be_uploaded",
                 JSON.stringify(attendanceArray)
               );
-              syncToBePerformed = true
+              syncToBePerformed = true;
               alert(
                 "You are currently offline! Attendance will be updated when network is established"
               );
             });
         }
-      }
-      else{
-        fetch("http://127.0.0.1:8000/app/getdetails/", {
+      } else {
+        fetch("https://rajasekhar2307.pythonanywhere.com/app/getdetails/", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -627,10 +616,9 @@ if (document.querySelector("#get-student-form")) {
             classStudying: classStudying,
             section: section,
           }),
-        })
-        .then(resp => {
+        }).then((resp) => {
           resp.json().then((respdata) => {
-            if(respdata['detail']){
+            if (respdata["detail"]) {
               alert(respdata["detail"]);
               return;
             }
@@ -644,18 +632,17 @@ if (document.querySelector("#get-student-form")) {
             }
 
             let array = [];
-            for (var i in respdata){
-              array.push(respdata[i].admission_number)
+            for (var i in respdata) {
+              array.push(respdata[i].admission_number);
             }
             const sectionArray = {
-              [classStudying+'-'+section]: array
-            }
-            
+              [classStudying + "-" + section]: array,
+            };
+
             localStorage.setItem("sections", JSON.stringify(sectionArray));
             if (document.getElementById("studentlist")) {
               const list = document.getElementById("studentlist");
               for (let i in respdata) {
-
                 const row = document.createElement("tr");
 
                 row.innerHTML = `
@@ -663,11 +650,9 @@ if (document.querySelector("#get-student-form")) {
                       `;
                 list.appendChild(row);
               }
-            }
-            else if (document.getElementById("studentlist-attendance")) {
+            } else if (document.getElementById("studentlist-attendance")) {
               const list = document.getElementById("studentlist-attendance");
               for (let i in respdata) {
-
                 const row = document.createElement("tr");
 
                 row.innerHTML = `
@@ -697,7 +682,7 @@ if (document.querySelector("#get-student-form")) {
                     attendanceList.push(attendance);
                   }
 
-                  fetch("http://127.0.0.1:8000/app/postattendance/", {
+                  fetch("https://rajasekhar2307.pythonanywhere.com/app/postattendance/", {
                     method: "POST",
                     headers: {
                       "Content-type": "application/json",
@@ -716,11 +701,10 @@ if (document.querySelector("#get-student-form")) {
                 });
             } else if (document.getElementById("studentlist-marks")) {
               if (!isLoggedIn()) {
-                window.location.href = "http://127.0.0.1:5502/login.html";
+                window.location.href = "https://kidhub.netlify.app/login.html";
               }
               const list = document.getElementById("studentlist-marks");
               for (let i in respdata) {
-
                 const row = document.createElement("tr");
 
                 row.innerHTML = `
@@ -736,7 +720,8 @@ if (document.querySelector("#get-student-form")) {
                 .addEventListener("submit", (submitEvent) => {
                   submitEvent.preventDefault();
                   const exam_type = document.getElementById("exam_type").value;
-                  const subject_name = document.getElementById("subject_name").value;
+                  const subject_name =
+                    document.getElementById("subject_name").value;
                   const max_marks = document.getElementById("max_marks").value;
                   let marksList = [];
                   for (let i in respdata) {
@@ -754,7 +739,7 @@ if (document.querySelector("#get-student-form")) {
                   let response = {
                     marks: marksList,
                   };
-                  fetch("http://127.0.0.1:8000/app/postmarks/", {
+                  fetch("https://rajasekhar2307.pythonanywhere.com/app/postmarks/", {
                     method: "POST",
                     headers: {
                       "Content-type": "application/json",
@@ -780,23 +765,21 @@ if (document.querySelector("#get-student-form")) {
 
 // Sumitting students marks
 
-
 // handling logout
 if (document.querySelector("#logout")) {
   const logout = document.getElementById("logout");
-  if(!isLoggedIn()){
+  if (!isLoggedIn()) {
     logout.innerText = "Login";
     logout.setAttribute("href", "login.html");
-  }
-  else{
+  } else {
     logout.innerText = "Logout";
     logout.setAttribute("href", "/");
   }
-  
+
   document.querySelector("#logout").addEventListener("click", () => {
     const storage = localStorage;
     storage.clear();
-    window.location.href = "http://127.0.0.1:5502/";
+    window.location.href = "https://kidhub.netlify.app/";
   });
 }
 
@@ -807,9 +790,11 @@ if (document.querySelector("#username-text")) {
   if (isLoggedIn()) {
     getUserDetails();
     const user = JSON.parse(storage.getItem("user"));
-
-    if(user.detail != null){
-      window.location.href = "http://127.0.0.1:5502/login.html";
+    if (user == null) {
+      location.reload();
+    }
+    if (user.detail != null) {
+      window.location.href = "https://kidhub.netlify.app/login.html";
     }
     const p = document.createElement("p");
     const text = document.createTextNode(user.username);
@@ -834,13 +819,12 @@ if (document.querySelector("#username-text")) {
 }
 
 async function getUserDetails() {
-  console.log("inside getuserdetails")
   if (!isLoggedIn()) {
-    window.location.href = "http://127.0.0.1:5502/login.html";
+    window.location.href = "https://kidhub.netlify.app/login.html";
   }
   const storage = localStorage;
   const tokens = JSON.parse(storage.getItem("jwt_tokens"));
-  const response = await fetch("http://127.0.0.1:8000/auth/users/me/", {
+  const response = await fetch("https://rajasekhar2307.pythonanywhere.com/auth/users/me/", {
     headers: {
       Authorization: "JWT " + tokens.access,
     },
@@ -853,7 +837,7 @@ async function getUserDetails() {
     const section = document.getElementById("services-teacher");
     section.remove();
     const usertype_response = await fetch(
-      "http://127.0.0.1:8000/students/me/",
+      "https://rajasekhar2307.pythonanywhere.com/students/me/",
       {
         headers: {
           Authorization: "JWT " + tokens.access,
@@ -862,12 +846,11 @@ async function getUserDetails() {
     );
     const usertype_data = await usertype_response.json();
     storage.setItem("user_type", JSON.stringify(usertype_data));
-
   } else if (JSON.parse(user).user_type == "T") {
     const section = document.getElementById("services-student");
     section.remove();
     const usertype_response = await fetch(
-      "http://127.0.0.1:8000/teachers/me/",
+      "https://rajasekhar2307.pythonanywhere.com/teachers/me/",
       {
         headers: {
           Authorization: "JWT " + tokens.access,
@@ -882,7 +865,7 @@ async function getUserDetails() {
 
 if (document.querySelector("#profile")) {
   if (!isLoggedIn()) {
-    window.location.href = "http://127.0.0.1:5502/login.html";
+    window.location.href = "https://kidhub.netlify.app/login.html";
   }
   const storage = localStorage;
   const user = JSON.parse(storage.getItem("user"));
@@ -927,7 +910,7 @@ if (document.querySelector("#profile")) {
 
 if (document.querySelector("#registration-form") != null) {
   if (!isLoggedIn()) {
-    window.location.href = "http://127.0.0.1:5502/login.html";
+    window.location.href = "https://kidhub.netlify.app/login.html";
   }
   document
     .querySelector("#registration-form")
@@ -960,8 +943,8 @@ if (document.querySelector("#registration-form") != null) {
         user_type: user_type,
       };
       const storage = localStorage;
-      const tokens = JSON.parse(storage.getItem('jwt_tokens'));
-      if(window.navigator.onLine == false){
+      const tokens = JSON.parse(storage.getItem("jwt_tokens"));
+      if (window.navigator.onLine == false) {
         const otherInfo = {
           admission_number: admission_number,
           father_name: father_name,
@@ -974,11 +957,13 @@ if (document.querySelector("#registration-form") != null) {
         };
         const userData = {
           user: user,
-          otherInfo: otherInfo
-        }
-        let studentToRegisterArray = JSON.parse(storage.getItem("students_to_register"));
-        if(studentToRegisterArray == null){
-          studentToRegisterArray = []
+          otherInfo: otherInfo,
+        };
+        let studentToRegisterArray = JSON.parse(
+          storage.getItem("students_to_register")
+        );
+        if (studentToRegisterArray == null) {
+          studentToRegisterArray = [];
         }
         studentToRegisterArray.push(userData);
         storage.setItem(
@@ -986,10 +971,12 @@ if (document.querySelector("#registration-form") != null) {
           JSON.stringify(studentToRegisterArray)
         );
         syncToBePerformed = true;
-        alert("You are offline, data will be saved when network is established.")
+        alert(
+          "You are offline, data will be saved when network is established."
+        );
         return;
       }
-      fetch("http://127.0.0.1:8000/auth/users/", {
+      fetch("https://rajasekhar2307.pythonanywhere.com/auth/users/", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -999,16 +986,15 @@ if (document.querySelector("#registration-form") != null) {
       })
         .then((response) => {
           response.json().then((data) => {
-
-            if(response.status == 400){
-              let errors = ""
+            if (response.status == 400) {
+              let errors = "";
               for (let i in data) {
-                errors += data[i][0] + "\n"
+                errors += data[i][0] + "\n";
               }
               alert(errors);
-              return
+              return;
             }
-            
+
             let usercreated_response = data;
             const user_id = usercreated_response.id;
 
@@ -1024,7 +1010,7 @@ if (document.querySelector("#registration-form") != null) {
               user: user_id,
             };
 
-            fetch("http://127.0.0.1:8000/students/", {
+            fetch("https://rajasekhar2307.pythonanywhere.com/students/", {
               method: "POST",
               headers: {
                 "Content-type": "application/json",
@@ -1032,17 +1018,20 @@ if (document.querySelector("#registration-form") != null) {
               },
               body: JSON.stringify(student),
             }).then((resp) => {
-              resp.json().then((respdata) => {
-                if (respdata["detail"]) {
-                  alert(respdata["detail"]);
-                  return;
-                }
-                if (!alert("Student created!")) {
-                  window.location.reload();
-                }
-              }).catch(() => {
-                alert("ERROR OCCURED")
-              });
+              resp
+                .json()
+                .then((respdata) => {
+                  if (respdata["detail"]) {
+                    alert(respdata["detail"]);
+                    return;
+                  }
+                  if (!alert("Student created!")) {
+                    window.location.reload();
+                  }
+                })
+                .catch(() => {
+                  alert("ERROR OCCURED");
+                });
             });
           });
         })
@@ -1054,7 +1043,7 @@ if (document.querySelector("#registration-form") != null) {
 
 if (document.querySelector("#get-student-info")) {
   if (!isLoggedIn()) {
-    window.location.href = "http://127.0.0.1:5502/login.html";
+    window.location.href = "https://kidhub.netlify.app/login.html";
   }
   document
     .querySelector("#get-student-info")
@@ -1072,7 +1061,6 @@ if (document.querySelector("#get-student-info")) {
       if (localstudent != null) {
         const pdata = localstudent.profile;
         const data = localstudent.user;
-
 
         const userid = document.getElementById("userid");
         userid.value = pdata.id;
@@ -1100,14 +1088,14 @@ if (document.querySelector("#get-student-info")) {
         class_year.value = data.class_year;
         const div = document.getElementById("div");
         div.value = data.div;
-        
-      }
-      else{
-        if(window.navigator.onLine == false){
-          alert("You are offline! requested data is unavailable in offline mode");
+      } else {
+        if (window.navigator.onLine == false) {
+          alert(
+            "You are offline! requested data is unavailable in offline mode"
+          );
           return;
         }
-        fetch("http://127.0.0.1:8000/app/getdetails/stup/", {
+        fetch("https://rajasekhar2307.pythonanywhere.com/app/getdetails/stup/", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -1124,7 +1112,7 @@ if (document.querySelector("#get-student-info")) {
               alert("Student not found");
             }
 
-            fetch("http://127.0.0.1:8000/app/getdetails/stuu/", {
+            fetch("https://rajasekhar2307.pythonanywhere.com/app/getdetails/stuu/", {
               method: "POST",
               headers: {
                 "Content-type": "application/json",
@@ -1146,8 +1134,8 @@ if (document.querySelector("#get-student-info")) {
                 }
                 const student = {
                   profile: pdata,
-                  user : data
-                }
+                  user: data,
+                };
                 students_array.push(student);
                 localStorage.setItem(
                   "students",
@@ -1189,7 +1177,7 @@ if (document.querySelector("#get-student-info")) {
     });
   document.querySelector("#update-form").addEventListener("submit", (e) => {
     e.preventDefault();
-    
+
     const userid = document.getElementById("userid").value;
     const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
@@ -1216,9 +1204,8 @@ if (document.querySelector("#get-student-info")) {
     const storage = localStorage;
     const tokens = JSON.parse(storage.getItem("jwt_tokens"));
 
-
     if (window.navigator.onLine == true) {
-      fetch("http://127.0.0.1:8000/app/uptdetails/stuu/", {
+      fetch("https://rajasekhar2307.pythonanywhere.com/app/uptdetails/stuu/", {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -1243,7 +1230,7 @@ if (document.querySelector("#get-student-info")) {
               user: user_id,
             };
 
-            fetch("http://127.0.0.1:8000/app/uptdetails/stup/", {
+            fetch("https://rajasekhar2307.pythonanywhere.com/app/uptdetails/stup/", {
               method: "PUT",
               headers: {
                 "Content-type": "application/json",
@@ -1262,8 +1249,7 @@ if (document.querySelector("#get-student-info")) {
         .catch((err) => {
           console.log(err);
         });
-    }
-    else{
+    } else {
       const student = {
         admission_number: admission_number,
         father_name: father_name,
@@ -1277,21 +1263,20 @@ if (document.querySelector("#get-student-info")) {
       };
       const info = {
         user: user,
-        student: student
-      }
+        student: student,
+      };
       localStorage.setItem("offline_update_data", JSON.stringify(info));
       syncToBePerformed = true;
     }
 
-    alert("Data saved. User will be updated when network is established")
-    
+    alert("Data saved. User will be updated when network is established");
   });
 }
 
 // student attendance
 if (document.querySelector("#get-student-attendance")) {
   if (!isLoggedIn()) {
-    window.location.href = "http://127.0.0.1:5502/login.html";
+    window.location.href = "https://kidhub.netlify.app/login.html";
   }
   document
     .querySelector("#get-student-attendance")
@@ -1302,9 +1287,7 @@ if (document.querySelector("#get-student-attendance")) {
       ).value;
       const storage = localStorage;
       const tokens = JSON.parse(storage.getItem("jwt_tokens"));
-      const localattendance = getAttendanceFromLocalStorage(
-        admission_number
-      );
+      const localattendance = getAttendanceFromLocalStorage(admission_number);
       if (localattendance != null) {
         const present = localattendance.present;
         const absent = localattendance.absent;
@@ -1313,9 +1296,8 @@ if (document.querySelector("#get-student-attendance")) {
         document.getElementById("present").innerText = present;
         document.getElementById("absent").innerText = absent;
         document.getElementById("percent").innerText = percent + "%";
-      }
-      else{
-        fetch("http://127.0.0.1:8000/app/getattendance/", {
+      } else {
+        fetch("https://rajasekhar2307.pythonanywhere.com/app/getattendance/", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -1324,17 +1306,21 @@ if (document.querySelector("#get-student-attendance")) {
           body: JSON.stringify({ admission_number: admission_number }),
         }).then((resp) => {
           resp.json().then((data) => {
-
-            let attendance_array = JSON.parse(localStorage.getItem("attendance"));
+            let attendance_array = JSON.parse(
+              localStorage.getItem("attendance")
+            );
             if (attendance_array === null) {
               attendance_array = [];
             }
             data = {
               ...data,
-              admission_number:admission_number
-            }
+              admission_number: admission_number,
+            };
             attendance_array.push(data);
-            localStorage.setItem("attendance", JSON.stringify(attendance_array));
+            localStorage.setItem(
+              "attendance",
+              JSON.stringify(attendance_array)
+            );
 
             const present = data.present;
             const absent = data.absent;
@@ -1351,7 +1337,7 @@ if (document.querySelector("#get-student-attendance")) {
 
 if (document.querySelector("#get-exam-results")) {
   if (!isLoggedIn()) {
-    window.location.href = "http://127.0.0.1:5502/login.html";
+    window.location.href = "https://kidhub.netlify.app/login.html";
   }
   document
     .querySelector("#get-exam-results")
@@ -1370,7 +1356,7 @@ if (document.querySelector("#get-exam-results")) {
         exam_type,
         admission_number
       );
-      if(localmarks!=null){
+      if (localmarks != null) {
         const list = document.querySelector("#studentlist-marks");
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -1380,13 +1366,8 @@ if (document.querySelector("#get-exam-results")) {
               <td>${localmarks.max_marks}</td>
             `;
         list.appendChild(row);
-      }
-      else if(window.navigator.onLine == false){
-        alert("Offline data not found")
-      }
-      else
-      {
-        fetch("http://127.0.0.1:8000/app/getmarks/", {
+      } else {
+        fetch("https://rajasekhar2307.pythonanywhere.com/app/getmarks/", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -1399,12 +1380,8 @@ if (document.querySelector("#get-exam-results")) {
           }),
         }).then((resp) => {
           resp.json().then((data) => {
-            if(data['detail']){
-              alert('Not Found')
-              return
-            }
             let marks_array = JSON.parse(localStorage.getItem("marks"));
-            if(marks_array === null){
+            if (marks_array === null) {
               marks_array = [];
             }
             marks_array.push(data);
@@ -1438,4 +1415,3 @@ if (document.querySelector("#get-exam-results")) {
       }
     });
 }
-

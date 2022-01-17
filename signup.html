@@ -49,6 +49,38 @@
     <link rel="manifest" href="/manifest.webmanifest" />
   </head>
   <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-light fixed-top py-3"
+      id="mainNav"
+    >
+      <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="home.html">Kidhub</a>
+        <button
+          class="navbar-toggler navbar-toggler-right"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ms-auto my-2 my-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#services">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="logout" href="login.html">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
     <section class="page-section" id="contact">
       <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -266,14 +298,26 @@
                 </div>
               </div>
               <div class="form-floating mb-3">
-                <input
-                  class="form-control"
+                <select name="class" class="form-control"
                   placeholder="(123) 456-7890"
                   id="class_year"
                   type="text"
                   data-sb-validations="required"
-                  required
-                />
+                  required id="class">
+                  <option value="NUR">Nursery</option>
+                  <option value="LKG">LKG</option>
+                  <option value="UKG">UKG</option>
+                  <option value="I">1</option>
+                  <option value="II">2</option>
+                  <option value="III">3</option>
+                  <option value="IV">4</option>
+                  <option value="V">5</option>
+                  <option value="VI">6</option>
+                  <option value="VII">7</option>
+                  <option value="VIII">8</option>
+                  <option value="IX">9</option>
+                  <option value="X">10</option>
+                </select>
                 <label for="class_year">Class</label>
                 <div
                   class="invalid-feedback"
@@ -283,14 +327,18 @@
                 </div>
               </div>
               <div class="form-floating mb-3">
-                <input
-                  placeholder="(123) 456-7890"
+               
+                <select name="section"  placeholder="(123) 456-7890"
                   class="form-control"
                   id="div"
                   type="text"
                   data-sb-validations="required"
-                  required
-                />
+                  required id="section">
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                </select>
                 <label for="div">Div</label>
                 <div class="invalid-feedback" data-sb-feedback="div:required">
                   Div is required.
